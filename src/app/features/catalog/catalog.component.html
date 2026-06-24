@@ -1,0 +1,269 @@
+<!-- <section class="bg-rose-50">
+  <div class="px-4 py-10 mx-auto max-w-7xl md:px-8">
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-rose-950 md:text-3xl">Catálogo de vehículos</h1>
+      <p class="mt-1 text-rose-900/70">Filtra por marca o busca el modelo que estás buscando.</p>
+    </div>
+
+    <div class="flex flex-col gap-3 p-4 mb-8 bg-white shadow-sm rounded-2xl ring-1 ring-rose-100 md:flex-row md:items-center">
+      <p-iconfield class="w-full md:max-w-sm" iconPosition="left">
+        <p-inputicon class="pi pi-search" />
+        <input
+          pInputText
+          type="text"
+          placeholder="Buscar por marca o modelo..."
+          class="w-full"
+          [(ngModel)]="searchTerm"
+        />
+      </p-iconfield>
+
+      <p-select
+        [options]="brandOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="selectedBrand"
+        placeholder="Marca"
+        class="w-full md:w-56"
+        [showClear]="true"
+      />
+
+      <p-button label="Limpiar filtros" icon="pi pi-filter-slash" [text]="true" (onClick)="resetFilters()" />
+    </div>
+
+    @if (filteredCars().length === 0) {
+      <div class="p-10 text-center bg-white rounded-2xl text-rose-900/60 ring-1 ring-rose-100">
+        No se encontraron vehículos con los filtros seleccionados.
+      </div>
+    } @else {
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (car of filteredCars(); track car.id) {
+          <article class="overflow-hidden transition bg-white shadow-sm group rounded-2xl ring-1 ring-rose-100 hover:shadow-lg">
+            <div class="relative h-48 overflow-hidden">
+              <img [src]="car.image" [alt]="car.brand + ' ' + car.model" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
+              <p-tag [value]="car.status" [severity]="statusSeverity(car.status)" class="absolute left-3 top-3" />
+            </div>
+            <div class="p-5">
+              <p class="text-xs font-semibold tracking-wider uppercase text-rose-500">{{ car.brand }} · {{ car.year }}</p>
+              <h3 class="mt-1 text-lg font-semibold text-rose-950">{{ car.model }} {{ car.version }}</h3>
+
+              <div class="flex flex-wrap gap-2 mt-3">
+                @for (tag of car.tags; track tag) {
+                  <span class="px-3 py-1 text-xs font-medium rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-100">{{ tag }}</span>
+                }
+              </div>
+
+              <dl class="grid grid-cols-2 mt-4 text-sm gap-y-1 text-rose-900/70">
+                <dt class="text-rose-900/50">Transmisión</dt>
+                <dd>{{ car.transmission }}</dd>
+                <dt class="text-rose-900/50">Combustible</dt>
+                <dd>{{ car.fuelType }}</dd>
+                <dt class="text-rose-900/50">Kilometraje</dt>
+                <dd>{{ car.mileage | number }} km</dd>
+              </dl>
+
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-rose-100">
+                <span class="text-xl font-bold text-rose-700">{{ formatPrice(car.price) }}</span>
+                <p-button label="Contactar asesor" size="small" icon="pi pi-whatsapp" [outlined]="true" />
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section> -->
+
+<section class="bg-rose-50">
+  <div class="px-4 py-10 mx-auto max-w-7xl md:px-8">
+    <!-- Header existente -->
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-rose-950 md:text-3xl">Catálogo de vehículos</h1>
+      <p class="mt-1 text-rose-900/70">Filtra por marca o busca el modelo que estás buscando.</p>
+    </div>
+
+    <!-- Filtros existentes -->
+    <div class="flex flex-col gap-3 p-4 mb-8 bg-white shadow-sm rounded-2xl ring-1 ring-rose-100 md:flex-row md:items-center">
+      <p-iconfield class="w-full md:max-w-sm" iconPosition="left">
+        
+        <input
+          pInputText
+          type="text"
+          placeholder="Buscar por marca o modelo..."
+          class="w-full"
+          [(ngModel)]="searchTerm"
+        />
+        <p-inputicon class="pi pi-search" />
+      </p-iconfield>
+
+      <p-select
+        [options]="brandOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="selectedBrand"
+        placeholder="Marca"
+        class="w-full md:w-56"
+        [showClear]="true"
+      />
+
+      <p-button label="Limpiar filtros" icon="pi pi-filter-slash" [text]="true" (onClick)="resetFilters()" />
+    </div>
+
+    <!-- Grid de vehículos -->
+    @if (filteredCars().length === 0) {
+      <div class="p-10 text-center bg-white rounded-2xl text-rose-900/60 ring-1 ring-rose-100">
+        No se encontraron vehículos con los filtros seleccionados.
+      </div>
+    } @else {
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (car of filteredCars(); track car.id) {
+          <article class="overflow-hidden transition bg-white shadow-sm group rounded-2xl ring-1 ring-rose-100 hover:shadow-lg">
+            <!-- Card existente -->
+            <div class="relative h-48 overflow-hidden">
+              <img [src]="car.image" [alt]="car.brand + ' ' + car.model" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
+              <p-tag [value]="car.status" [severity]="statusSeverity(car.status)" class="absolute left-3 top-3" />
+            </div>
+            <div class="p-5">
+              <p class="text-xs font-semibold tracking-wider uppercase text-rose-500">{{ car.brand }} · {{ car.year }}</p>
+              <h3 class="mt-1 text-lg font-semibold text-rose-950">{{ car.model }} {{ car.version }}</h3>
+
+              <div class="flex flex-wrap gap-2 mt-3">
+                @for (tag of car.tags; track tag) {
+                  <span class="px-3 py-1 text-xs font-medium rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-100">{{ tag }}</span>
+                }
+              </div>
+
+              <dl class="grid grid-cols-2 mt-4 text-sm gap-y-1 text-rose-900/70">
+                <dt class="text-rose-900/50">Transmisión</dt>
+                <dd>{{ car.transmission }}</dd>
+                <dt class="text-rose-900/50">Combustible</dt>
+                <dd>{{ car.fuelType }}</dd>
+                <dt class="text-rose-900/50">Kilometraje</dt>
+                <dd>{{ car.mileage | number }} km</dd>
+              </dl>
+
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-rose-100">
+                <span class="text-xl font-bold text-rose-700">{{ formatPrice(car.price) }}</span>
+                <div class="flex gap-2">
+                  <!-- Botón de WhatsApp directo -->
+                  <p-button 
+                    label="WhatsApp" 
+                    size="small" 
+                    icon="pi pi-whatsapp" 
+                    (onClick)="openContactDialog(car)"
+                    styleClass="p-button-success"
+                  />
+                  <!-- Botón de contacto -->
+                  <p-button 
+                    label="Contactar" 
+                    size="small" 
+                    icon="pi pi-comment" 
+                    [outlined]="true"
+                    (onClick)="openContactDialog(car)"
+                  />
+                </div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Diálogo de Contacto -->
+<p-dialog 
+  header="Contactar Asesor" 
+  [(visible)]="showContactDialog" 
+  [modal]="true" 
+  [dismissableMask]="true"
+  [style]="{ width: '500px', maxWidth: '90vw' }"
+  (onHide)="closeContactDialog()"
+>
+  @if (selectedCar()) {
+    <div class="p-3 mb-4 rounded-lg bg-rose-50">
+      <div class="flex items-center gap-3">
+        <img [src]="selectedCar()?.image" [alt]="selectedCar()?.model" class="object-cover w-16 h-16 rounded-lg" />
+        <div>
+          <h3 class="font-semibold text-rose-950">{{ selectedCar()?.brand }} {{ selectedCar()?.model }}</h3>
+          <p class="text-sm text-rose-900/70">{{ selectedCar()?.version }} · {{ selectedCar()?.year }}</p>
+          <p class="text-sm font-bold text-rose-700">{{ formatPrice(selectedCar()?.price || 0) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <div>
+        <label class="block text-sm font-medium text-rose-900/70">Tu nombre</label>
+        <input 
+          pInputText 
+          [(ngModel)]="contactData.name" 
+          placeholder="Ingresa tu nombre"
+          class="w-full mt-1"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-rose-900/70">Teléfono</label>
+        <input 
+          pInputText 
+          [(ngModel)]="contactData.phone" 
+          placeholder="Ingresa tu teléfono"
+          class="w-full mt-1"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-rose-900/70">Email</label>
+        <input 
+          pInputText 
+          [(ngModel)]="contactData.email" 
+          placeholder="Ingresa tu email"
+          class="w-full mt-1"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-rose-900/70">Mensaje</label>
+        <textarea 
+          pTextarea 
+          [(ngModel)]="contactData.message" 
+          placeholder="¿Tienes alguna pregunta sobre este vehículo?"
+          class="w-full mt-1"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-col gap-2 mt-4">
+        <p-button 
+          label="Enviar por WhatsApp" 
+          icon="pi pi-whatsapp" 
+          (onClick)="sendWhatsAppMessage()"
+          styleClass="w-full p-button-success p-button-lg"
+        />
+        <p-button 
+          label="Enviar por Email" 
+          icon="pi pi-envelope" 
+          (onClick)="sendEmail()"
+          styleClass="w-full p-button-secondary p-button-lg"
+          [outlined]="true"
+        />
+      </div>
+      
+      <p class="mt-2 text-xs text-center text-rose-900/50">
+        Al contactar, aceptas que un asesor se comunique contigo a través de WhatsApp o email.
+      </p>
+    </div>
+  }
+</p-dialog>
+
+<!-- Botón flotante de WhatsApp -->
+<div class="fixed z-50 bottom-6 right-6">
+  <a 
+    href="https://wa.me/13172490169" 
+    target="_blank"
+    class="flex items-center justify-center w-16 h-16 text-white transition-transform bg-green-500 rounded-full shadow-lg hover:scale-110 hover:bg-green-600"
+    title="Contactar por WhatsApp"
+  >
+    <i class="text-3xl pi pi-whatsapp"></i>
+  </a>
+</div>

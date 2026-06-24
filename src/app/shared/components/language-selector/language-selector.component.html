@@ -1,0 +1,48 @@
+<div class="relative" (clickOutside)="close()">
+
+  <!-- Botón trigger -->
+  <button
+    type="button"
+    (click)="toggle()"
+    class="flex items-center gap-1.5 rounded-lg border border-rose-200 bg-white px-3 py-1.5
+           text-sm font-medium text-rose-800 shadow-sm transition
+           hover:border-rose-400 hover:bg-rose-50 focus:outline-none"
+    [attr.aria-expanded]="open()"
+    aria-haspopup="listbox"
+  >
+    <span class="text-base leading-none">{{ i18n.langMeta().flag }}</span>
+    <span class="hidden sm:inline">{{ i18n.langMeta().label }}</span>
+    <i class="pi pi-chevron-down text-xs transition-transform"
+       [class.rotate-180]="open()"></i>
+  </button>
+
+  <!-- Dropdown -->
+  @if (open()) {
+    <div
+      class="absolute right-0 z-50 mt-1 w-44 rounded-xl border border-rose-100
+             bg-white py-1 shadow-lg ring-1 ring-rose-200/50"
+      role="listbox"
+    >
+      @for (lang of languages; track lang.code) {
+        <button
+          type="button"
+          role="option"
+          [attr.aria-selected]="i18n.lang() === lang.code"
+          (click)="select(lang.code)"
+          class="flex w-full items-center gap-2.5 px-4 py-2 text-sm transition
+                 hover:bg-rose-50"
+          [class.bg-rose-50]="i18n.lang() === lang.code"
+          [class.font-semibold]="i18n.lang() === lang.code"
+          [class.text-rose-700]="i18n.lang() === lang.code"
+          [class.text-rose-900]="i18n.lang() !== lang.code"
+        >
+          <span class="text-base">{{ lang.flag }}</span>
+          <span>{{ lang.label }}</span>
+          @if (i18n.lang() === lang.code) {
+            <i class="pi pi-check ml-auto text-rose-600"></i>
+          }
+        </button>
+      }
+    </div>
+  }
+</div>

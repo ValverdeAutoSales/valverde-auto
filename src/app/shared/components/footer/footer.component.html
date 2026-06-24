@@ -1,0 +1,44 @@
+<footer class="bg-gradient-rose text-rose-50">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-4 md:px-8">
+    <div class="md:col-span-2">
+      <img src="assets/images/confondoroseylogoblanco.png" alt="Valverde Auto Sales" class="w-auto p-1 mb-4 rounded-lg h-28 bg-white/90 md:h-24" />
+      <p class="max-w-md mt-4 text-sm text-rose-50/80">{{ i18n.get('footer.description') }}</p>
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-rose-50/90">
+        {{ i18n.get('footer.navigation') }}
+      </h3>
+      <ul class="space-y-2 text-sm text-rose-50/80">
+        <li><a routerLink="/"         class="hover:text-white">{{ i18n.get('nav.home') }}</a></li>
+        <li><a routerLink="/catalogo" class="hover:text-white">{{ i18n.get('nav.catalog') }}</a></li>
+        <li><a routerLink="/login"    class="hover:text-white">{{ i18n.get('nav.login') }}</a></li>
+        <!-- NUEVO: Enlace en navegación del footer -->
+        <li>
+          <a href="https://valverdeautosales.startyourcreditapproval.com/?lang=es" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="text-rose-200 hover:text-white font-semibold">
+            <i class="pi pi-check-circle mr-1"></i>
+            {{ i18n.get('nav.pre_approval') }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-rose-50/90">
+        {{ i18n.get('footer.contact') }}
+      </h3>
+      <ul class="space-y-2 text-sm text-rose-50/80">
+        <li class="flex items-center gap-2"><i class="pi pi-map-marker"></i> 4308 West Washington Street, Ste B - Indianapolis IN 46241</li>
+        <li class="flex items-center gap-2"><i class="pi pi-phone"></i> +1 (317) 249-0169 / (317) 600-7141</li>
+        <li class="flex items-center gap-2"><i class="pi pi-envelope"></i> contacto&#64;ValverdeZulema8@gmail.com</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/15 px-4 py-4 text-center text-xs text-rose-50/70">
+    &copy; {{ year }} Valverde Auto Sales. {{ i18n.get('footer.rights') }}
+  </div>
+</footer>

@@ -1,0 +1,36 @@
+:host ::ng-deep {
+  .hero-carousel .p-carousel-content {
+    border-radius: 0;
+  }
+
+  .hero-carousel .p-carousel-indicator-list {
+    padding-bottom: 1rem;
+  }
+
+  // Estilos para el botón usando la clase que ya aplicaste
+  .custom-hero-button.p-button {
+    background-color: #d28a85 !important; // color 400
+    border-color: #d28a85 !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #e3aaa5 !important; // color 300
+      border-color: #e3aaa5 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(210, 138, 133, 0.4);
+    }
+
+    &:active {
+      background-color: #c07a75 !important;
+      border-color: #c07a75 !important;
+    }
+
+    .p-button-label {
+      color: white !important;
+    }
+
+    .p-button-icon {
+      color: white !important;
+    }
+  }
+}

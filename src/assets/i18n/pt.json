@@ -1,0 +1,171 @@
+{
+  "nav": {
+    "home": "Início",
+    "catalog": "Catálogo",
+    "login": "Entrar",
+    "logout": "Sair",
+    "admin": "Painel admin",
+    "hello": "Olá",
+    "pre_approval": "Pré-aprovação"
+  },
+  "landing": {
+    "brands_title": "Marcas com que trabalhamos",
+    "why_title": "Por que comprar na",
+    "why_subtitle": "Mais de uma década conectando famílias e empresas com o veículo correto.",
+    "featured_title": "Veículos em destaque",
+    "featured_subtitle": "Seleção de unidades disponíveis esta semana.",
+    "view_all": "Ver catálogo completo",
+    "detail": "Ver detalhe",
+    "cta_title": "Pronto para seu próximo carro?",
+    "cta_subtitle": "Agenda una cita con uno de nuestros asesores o explora el catálogo en línea.",
+    "explore": "Explorar catálogo",
+    "my_account": "Acessar minha conta",
+    "benefits": [
+      {
+        "icon": "pi pi-shield",
+        "title": "Garantia certificada",
+        "description": "Todos os nossos veículos passam por uma rigorosa inspeção de 150 pontos."
+      },
+      {
+        "icon": "pi pi-wallet",
+        "title": "Financiamento sob medida",
+        "description": "Trabalhamos com as principais instituições para oferecer a melhor taxa."
+      },
+      {
+        "icon": "pi pi-headphones",
+        "title": "Assessoria personalizada",
+        "description": "Um consultor acompanha você desde a escolha até a entrega das chaves."
+      },
+      {
+        "icon": "pi pi-sync",
+        "title": "Recompra e troca",
+        "description": "Aceitamos seu carro atual como parte do pagamento, com avaliação justa."
+      }
+    ],
+    "slides": [
+      {
+        "title": "Encuentra el auto de tus sueños",
+        "subtitle": "Vehículos nuevos y seminuevos certificados, con garantía Valverde.",
+        "cta": "Ver catálogo"
+      },
+      {
+        "title": "Estrena tu SUV 0 km",
+        "subtitle": "Las mejores marcas, financiamiento flexible y entrega inmediata.",
+        "cta": "Cotizar ahora"
+      },
+      {
+        "title": "Vende o cambia tu auto",
+        "subtitle": "Tasación justa y rápida para tu próxima compra.",
+        "cta": "Contáctanos"
+      }
+    ]
+  },
+  "catalog": {
+    "title": "Catálogo de vehículos",
+    "subtitle": "Filtra por marca o busca el modelo que estás buscando.",
+    "search": "Buscar por marca o modelo...",
+    "all_brands": "Todas las marcas",
+    "clear_filters": "Limpiar filtros",
+    "no_results": "No se encontraron vehículos con los filtros seleccionados.",
+    "transmission": "Transmisión",
+    "fuel": "Combustible",
+    "mileage": "Kilometraje",
+    "contact_advisor": "Contactar asesor",
+    "whatsapp": "WhatsApp",
+    "contact": "Contactar"
+  },
+  "login": {
+    "title": "Accede a tu cuenta",
+    "subtitle": "Ingresa con tu correo y contraseña.",
+    "email": "Correo electrónico",
+    "email_placeholder": "correo@ejemplo.com",
+    "email_error": "Ingresa un correo válido.",
+    "password": "Contraseña",
+    "password_placeholder": "••••••••",
+    "password_error": "Mínimo 4 caracteres.",
+    "sign_in": "Ingresar",
+    "no_account": "¿No tienes cuenta?",
+    "create_account": "Regístrate gratis",
+    "register_title": "Crear cuenta",
+    "register_subtitle": "Tu cuenta se crea como cliente por defecto.",
+    "name": "Nombre completo",
+    "name_placeholder": "Tu nombre",
+    "name_error": "Ingresa tu nombre.",
+    "confirm_password": "Confirmar contraseña",
+    "confirm_placeholder": "Repite tu contraseña",
+    "confirm_error": "Las contraseñas no coinciden.",
+    "register_btn": "Crear cuenta",
+    "have_account": "¿Ya tienes cuenta?",
+    "back_login": "Iniciar sesión",
+    "admin_hint_title": "Acceso administrador:",
+    "admin_hint_email": "ValverdeZulema8@gmail.com",
+    "admin_hint_password": "Brittz@8"
+  },
+  "dashboard": {
+    "title": "Panel administrativo",
+    "welcome": "Bienvenida",
+    "manage": "Gestiona el inventario de vehículos.",
+    "add_vehicle": "Agregar vehículo",
+    "total": "Total vehículos",
+    "available": "Disponibles",
+    "reserved": "Reservados",
+    "sold": "Vendidos",
+    "inventory": "Inventario de vehículos",
+    "photo": "Foto",
+    "vehicle": "Vehículo",
+    "year": "Año",
+    "price": "Precio",
+    "km_label": "Kilometraje",
+    "fuel": "Combustible",
+    "status": "Estado",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "empty": "No hay vehículos registrados. ¡Agrega el primero!",
+    "create_title": "Agregar vehículo",
+    "edit_title": "Editar vehículo",
+    "brand": "Marca *",
+    "model": "Modelo *",
+    "version": "Versión *",
+    "brand_placeholder": "Ej: Toyota",
+    "model_placeholder": "Ej: Corolla Cross",
+    "version_placeholder": "Ej: SE-G Hybrid",
+    "required": "Campo requerido.",
+    "tags": "Etiquetas",
+    "tags_hint": "Separadas por coma",
+    "image_url": "URL de imagen *",
+    "image_url_placeholder": "https://... o assets/images/...",
+    "upload_image": "O sube una imagen local",
+    "upload_hint": "JPG, PNG, WEBP.",
+    "preview": "Preview",
+    "cancel": "Cancelar",
+    "save": "Guardar vehículo",
+    "update": "Actualizar",
+    "confirm_delete_title": "Confirmar eliminación",
+    "confirm_delete_msg": "¿Eliminar {brand} {model}? Esta acción no se puede deshacer.",
+    "confirm_yes": "Sí, eliminar",
+    "confirm_no": "Cancelar",
+    "saved_ok": "Vehículo guardado",
+    "updated_ok": "Vehículo actualizado",
+    "deleted_ok": "Eliminado",
+    "saved_detail": "registrado correctamente.",
+    "updated_detail": "actualizado correctamente.",
+    "deleted_detail": "fue eliminado."
+  },
+  "status": {
+    "Disponible": "Disponível",
+    "Reservado": "Reservado",
+    "Vendido": "Vendido"
+  },
+  "footer": {
+    "description": "Na Valverde Auto Sales você encontra veículos novos e seminovos com garantia, financiamento sob medida e assessoria especializada.",
+    "navigation": "Navegação",
+    "contact": "Contato",
+    "rights": "Todos os direitos reservados."
+  },
+  "floating": {
+    "cars": "Carros",
+    "advisor": "Contatar consultor",
+    "quote": "Cotar online"
+  }
+}

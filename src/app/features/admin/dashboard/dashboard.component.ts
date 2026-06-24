@@ -1,0 +1,196 @@
+import { Component, computed, inject, signal } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { CarService } from '../../../core/services/car.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { I18nService } from '../../../core/services/i18n.service';
+import { Car, CarPayload, CarStatus, FuelType, Transmission } from '../../../core/models/car.model';
+
+type DialogMode = 'create' | 'edit';
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [
+    DecimalPipe, FormsModule, ReactiveFormsModule,
+    TableModule, TagModule, ButtonModule, DialogModule,
+    InputTextModule, SelectModule, TextareaModule,
+    ConfirmDialogModule, ToastModule, ProgressSpinnerModule
+  ],
+  providers: [ConfirmationService],
+  templateUrl: './dashboard.component.html'
+})
+export class DashboardComponent {
+  readonly carService          = inject(CarService);
+  readonly auth                = inject(AuthService);
+  readonly i18n                = inject(I18nService);
+  private readonly fb          = inject(FormBuilder);
+  private readonly cs          = inject(ConfirmationService);
+  private readonly ms          = inject(MessageService);
+
+  readonly cars         = this.carService.cars;
+  readonly showDialog   = signal(false);
+  readonly dialogMode   = signal<DialogMode>('create');
+  readonly editingId    = signal<number | null>(null);
+  readonly imagePreview = signal<string>('');
+  readonly saving       = signal(false);
+  readonly deleting     = signal<number | null>(null);
+
+  readonly stats = computed(() => {
+    const c = this.cars();
+    return {
+      total:     c.length,
+      available: c.filter(x => x.status === 'Disponible').length,
+      reserved:  c.filter(x => x.status === 'Reservado').length,
+      sold:      c.filter(x => x.status === 'Vendido').length
+    };
+  });
+
+  readonly statusOptions: { label: string; value: CarStatus }[] = [
+    { label: 'Disponible', value: 'Disponible' },
+    { label: 'Reservado',  value: 'Reservado'  },
+    { label: 'Vendido',    value: 'Vendido'    }
+  ];
+  readonly fuelOptions: { label: string; value: FuelType }[] = [
+    { label: 'Gasolina', value: 'Gasolina' },
+    { label: 'Diésel',   value: 'Diésel'   },
+    { label: 'Híbrido',  value: 'Híbrido'  },
+    { label: 'Eléctrico',value: 'Eléctrico'}
+  ];
+  readonly txOptions: { label: string; value: Transmission }[] = [
+    { label: 'Automática', value: 'Automática' },
+    { label: 'Manual',     value: 'Manual'     }
+  ];
+
+  readonly form = this.fb.nonNullable.group({
+    brand:        ['', Validators.required],
+    model:        ['', Validators.required],
+    version:      ['', Validators.required],
+    year:         [new Date().getFullYear(), [Validators.required, Validators.min(1990), Validators.max(2035)]],
+    price:        [0,  [Validators.required, Validators.min(1)]],
+    mileage:      [0,  [Validators.required, Validators.min(0)]],
+    fuelType:     ['Gasolina'  as FuelType,    Validators.required],
+    transmission: ['Automática'as Transmission, Validators.required],
+    status:       ['Disponible'as CarStatus,    Validators.required],
+    image:        ['', Validators.required],
+    tags:         ['']
+  });
+
+  // ── Abrir diálogos ────────────────────────────────────────────────────────
+  openCreate(): void {
+    this.dialogMode.set('create');
+    this.editingId.set(null);
+    this.imagePreview.set('');
+    this.form.reset({
+      brand:'', model:'', version:'',
+      year: new Date().getFullYear(),
+      price:0, mileage:0,
+      fuelType:'Gasolina', transmission:'Automática', status:'Disponible',
+      image:'', tags:''
+    });
+    this.showDialog.set(true);
+  }
+
+  openEdit(car: Car): void {
+    this.dialogMode.set('edit');
+    this.editingId.set(car.id);
+    this.imagePreview.set(car.image);
+    this.form.setValue({
+      brand: car.brand, model: car.model, version: car.version,
+      year: car.year, price: car.price, mileage: car.mileage,
+      fuelType: car.fuelType, transmission: car.transmission,
+      status: car.status, image: car.image,
+      tags: car.tags.join(', ')
+    });
+    this.showDialog.set(true);
+  }
+
+  // ── Imagen ────────────────────────────────────────────────────────────────
+  onImageUrlChange(url: string): void { this.imagePreview.set(url); }
+
+  async onFileSelected(event: Event): Promise<void> {
+    const file = (event.target as HTMLInputElement)?.files?.[0];
+    if (!file) return;
+    const url = await this.carService.uploadImage(file);
+    this.form.patchValue({ image: url });
+    this.imagePreview.set(url);
+  }
+
+  // ── CRUD ─────────────────────────────────────────────────────────────────
+  async save(): Promise<void> {
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+
+    this.saving.set(true);
+    const raw = this.form.getRawValue();
+    const payload: CarPayload = {
+      brand: raw.brand, model: raw.model, version: raw.version,
+      year: raw.year, price: raw.price, mileage: raw.mileage,
+      fuelType: raw.fuelType, transmission: raw.transmission,
+      status: raw.status, image: raw.image,
+      tags: raw.tags.split(',').map(t => t.trim()).filter(Boolean)
+    };
+
+    try {
+      if (this.dialogMode() === 'create') {
+        await this.carService.create(payload);
+        this.ms.add({ severity:'success', summary: this.i18n.get('dashboard.savedOk'),
+          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.savedDetail')}` });
+      } else {
+        await this.carService.update(this.editingId()!, payload);
+        this.ms.add({ severity:'success', summary: this.i18n.get('dashboard.updatedOk'),
+          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.updatedDetail')}` });
+      }
+      this.showDialog.set(false);
+    } catch (e) {
+      this.ms.add({ severity:'error', summary:'Error', detail: String(e) });
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
+  confirmDelete(car: Car): void {
+    this.cs.confirm({
+      message: this.i18n.get('dashboard.confirmDeleteMsg', { brand: car.brand, model: car.model }),
+      header:  this.i18n.get('dashboard.confirmDeleteTitle'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel:  this.i18n.get('dashboard.confirmYes'),
+      rejectLabel:  this.i18n.get('dashboard.confirmNo'),
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: async () => {
+        this.deleting.set(car.id);
+        await this.carService.delete(car.id);
+        this.deleting.set(null);
+        this.ms.add({ severity:'warn', summary: this.i18n.get('dashboard.deletedOk'),
+          detail:`${car.brand} ${car.model} ${this.i18n.get('dashboard.deletedDetail')}` });
+      }
+    });
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  statusSeverity(s: CarStatus): 'success' | 'warn' | 'danger' {
+    return s === 'Disponible' ? 'success' : s === 'Reservado' ? 'warn' : 'danger';
+  }
+
+  formatPrice(v: number): string {
+    return new Intl.NumberFormat('es-PE',
+      { style:'currency', currency:'USD', maximumFractionDigits:0 }).format(v);
+  }
+
+  get dialogTitle(): string {
+    return this.dialogMode() === 'create'
+      ? this.i18n.get('dashboard.createTitle')
+      : this.i18n.get('dashboard.editTitle');
+  }
+}

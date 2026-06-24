@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'primeicons/primeicons.css';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+}
+
+* { box-sizing: border-box; }
+
+.text-gradient-rose {
+  background: linear-gradient(135deg, #e3aaa5 0%, #bd6f6f 50%, #864647 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-gradient-rose {
+  background: linear-gradient(135deg, #e3aaa5 0%, #bd6f6f 55%, #6e3a3b 100%);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #bd6f6f; border-radius: 8px; }
+::-webkit-scrollbar-track { background: #f9e8e6; }

@@ -1,0 +1,172 @@
+{
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "admin": "Admin panel",
+    "hello": "Hello",
+    "pre_approval": "Pre-approval"
+  },
+  "landing": {
+    "brands_title": "Brands we work with",
+    "why_title": "Why buy at",
+    "why_subtitle": "Over a decade connecting families and companies with the right vehicle.",
+    "featured_title": "Featured vehicles",
+    "featured_subtitle": "Selection of available units this week.",
+    "view_all": "View full catalog",
+    "detail": "View detail",
+    "cta_title": "Ready for your next car?",
+    "cta_subtitle": "Schedule an appointment or browse the full catalog online.",
+    "explore": "Explore catalog",
+    "my_account": "Access my account",
+    
+    "benefits": [
+      {
+        "icon": "pi pi-shield",
+        "title": "Certified guarantee",
+        "description": "All our vehicles go through a rigorous 150-point inspection."
+      },
+      {
+        "icon": "pi pi-wallet",
+        "title": "Flexible financing",
+        "description": "We work with top lenders to offer you the best rate."
+      },
+      {
+        "icon": "pi pi-headphones",
+        "title": "Personalized advice",
+        "description": "An advisor accompanies you from selection to key handover."
+      },
+      {
+        "icon": "pi pi-sync",
+        "title": "Trade-in & buy-back",
+        "description": "We accept your current car as part payment, with fair valuation."
+      }
+    ],
+    "slides": [
+      {
+        "title": "Find the car of your dreams",
+        "subtitle": "New and certified pre-owned vehicles with Valverde guarantee.",
+        "cta": "View catalog"
+      },
+      {
+        "title": "Drive your brand-new SUV",
+        "subtitle": "Top brands, flexible financing and immediate delivery.",
+        "cta": "Get a quote"
+      },
+      {
+        "title": "Sell or trade your car",
+        "subtitle": "Fair and fast appraisal for your next purchase.",
+        "cta": "Contact us"
+      }
+    ]
+  },
+  "catalog": {
+    "title": "Vehicle catalog",
+    "subtitle": "Filter by brand or search for the model you're looking for.",
+    "search": "Search by brand or model...",
+    "all_brands": "All brands",
+    "clear_filters": "Clear filters",
+    "no_results": "No vehicles found with the selected filters.",
+    "transmission": "Transmission",
+    "fuel": "Fuel",
+    "mileage": "Mileage",
+    "contact_advisor": "Contact advisor",
+    "whatsapp": "WhatsApp",
+    "contact": "Contact"
+  },
+  "login": {
+    "title": "Access your account",
+    "subtitle": "Sign in with your email and password.",
+    "email": "Email address",
+    "email_placeholder": "email@example.com",
+    "email_error": "Enter a valid email.",
+    "password": "Password",
+    "password_placeholder": "••••••••",
+    "password_error": "Minimum 4 characters.",
+    "sign_in": "Sign in",
+    "no_account": "Don't have an account?",
+    "create_account": "Sign up free",
+    "register_title": "Create account",
+    "register_subtitle": "Your account is created as client by default.",
+    "name": "Full name",
+    "name_placeholder": "Your name",
+    "name_error": "Enter your name.",
+    "confirm_password": "Confirm password",
+    "confirm_placeholder": "Repeat your password",
+    "confirm_error": "Passwords do not match.",
+    "register_btn": "Create account",
+    "have_account": "Already have an account?",
+    "back_login": "Sign in",
+    "admin_hint_title": "Administrator access:",
+    "admin_hint_email": "ValverdeZulema8@gmail.com",
+    "admin_hint_password": "Brittz@8"
+  },
+  "dashboard": {
+    "title": "Panel administrativo",
+    "welcome": "Bienvenida",
+    "manage": "Gestiona el inventario de vehículos.",
+    "add_vehicle": "Agregar vehículo",
+    "total": "Total vehículos",
+    "available": "Disponibles",
+    "reserved": "Reservados",
+    "sold": "Vendidos",
+    "inventory": "Inventario de vehículos",
+    "photo": "Foto",
+    "vehicle": "Vehículo",
+    "year": "Año",
+    "price": "Precio",
+    "km_label": "Kilometraje",
+    "fuel": "Combustible",
+    "status": "Estado",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "empty": "No hay vehículos registrados. ¡Agrega el primero!",
+    "create_title": "Agregar vehículo",
+    "edit_title": "Editar vehículo",
+    "brand": "Marca *",
+    "model": "Modelo *",
+    "version": "Versión *",
+    "brand_placeholder": "Ej: Toyota",
+    "model_placeholder": "Ej: Corolla Cross",
+    "version_placeholder": "Ej: SE-G Hybrid",
+    "required": "Campo requerido.",
+    "tags": "Etiquetas",
+    "tags_hint": "Separadas por coma",
+    "image_url": "URL de imagen *",
+    "image_url_placeholder": "https://... o assets/images/...",
+    "upload_image": "O sube una imagen local",
+    "upload_hint": "JPG, PNG, WEBP.",
+    "preview": "Preview",
+    "cancel": "Cancelar",
+    "save": "Guardar vehículo",
+    "update": "Actualizar",
+    "confirm_delete_title": "Confirmar eliminación",
+    "confirm_delete_msg": "¿Eliminar {brand} {model}? Esta acción no se puede deshacer.",
+    "confirm_yes": "Sí, eliminar",
+    "confirm_no": "Cancelar",
+    "saved_ok": "Vehículo guardado",
+    "updated_ok": "Vehículo actualizado",
+    "deleted_ok": "Eliminado",
+    "saved_detail": "registrado correctamente.",
+    "updated_detail": "actualizado correctamente.",
+    "deleted_detail": "fue eliminado."
+  },
+  "status": {
+    "Disponible": "Available",
+    "Reservado": "Reserved",
+    "Vendido": "Sold"
+  },
+  "footer": {
+    "description": "At Valverde Auto Sales you find new and pre-owned vehicles with guarantee, flexible financing and a team that knows the road.",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "floating": {
+    "cars": "Cars",
+    "advisor": "Contact advisor",
+    "quote": "Get quote"
+  }
+}
