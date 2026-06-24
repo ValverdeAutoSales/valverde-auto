@@ -33,12 +33,23 @@ jobs:
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
 
-      - name: SPA 404 fix
-        run: cp dist/valverde-auto-sales/browser/index.html dist/valverde-auto-sales/browser/404.html
+      - name: Verificar estructura de dist
+        run: |
+          echo "Contenido de dist:"
+          ls -la dist/
+          echo "Buscando browser:"
+          find dist/ -name "browser" -type d
+
+      - name: SPA 404 fix (automático)
+        run: |
+          BUILD_DIR=$(find dist/ -name "browser" -type d | head -1)
+          echo "Directorio de build: $BUILD_DIR"
+          cp $BUILD_DIR/index.html $BUILD_DIR/404.html
+          echo "404.html creado en: $BUILD_DIR/404.html"
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/valverde-auto-sales/browser
+          path: $(find dist/ -name "browser" -type d | head -1)
 
   deploy:
     environment:
