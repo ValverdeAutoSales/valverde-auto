@@ -25,31 +25,57 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install
+      - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build production
-        run: npx ng build --configuration production --base-href /valverde-auto/
+      - name: 🔍 Verificar estructura del proyecto
+        run: |
+          echo "📁 Archivos en raíz:"
+          ls -la
+          echo "📄 angular.json existe? $(test -f angular.json && echo 'SÍ' || echo 'NO')"
+          echo "📄 package.json existe? $(test -f package.json && echo 'SÍ' || echo 'NO')"
+
+      - name: 🏗️ Intentar build con logs completos
+        run: |
+          npx ng build --configuration production --base-href /valverde-auto/ 2>&1 | tee build.log
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "Código de salida: $EXIT_CODE"
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ El build falló. Errores:"
+            grep -i "error" build.log | head -20
+            exit 1
+          fi
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
 
-      - name: Verificar estructura de dist
+      - name: 📂 Verificar dist generado
         run: |
-          echo "Contenido de dist:"
-          ls -la dist/
-          echo "Buscando browser:"
-          find dist/ -name "browser" -type d
+          if [ -d "dist" ]; then
+            echo "✅ dist existe!"
+            echo "Estructura:"
+            ls -R dist/ | head -50
+          else
+            echo "❌ dist NO se generó. Contenido de build.log:"
+            cat build.log
+            exit 1
+          fi
 
-      - name: SPA 404 fix (automático)
+      - name: SPA 404 fix
         run: |
-          BUILD_DIR=$(find dist/ -name "browser" -type d | head -1)
-          echo "Directorio de build: $BUILD_DIR"
-          cp $BUILD_DIR/index.html $BUILD_DIR/404.html
-          echo "404.html creado en: $BUILD_DIR/404.html"
+          # Buscar index.html en cualquier lugar
+          INDEX=$(find dist/ -name "index.html" | head -1)
+          if [ -n "$INDEX" ]; then
+            DIR=$(dirname "$INDEX")
+            cp "$INDEX" "$DIR/404.html"
+            echo "✅ 404.html creado en $DIR"
+          else
+            echo "❌ No se encontró index.html"
+            exit 1
+          fi
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: $(find dist/ -name "browser" -type d | head -1)
+          path: $(find dist/ -name "index.html" | head -1 | xargs dirname)
 
   deploy:
     environment:
