@@ -22,11 +22,6 @@
     "my_account": "访问我的账户",
     "benefits": [
       {
-        "icon": "pi pi-shield",
-        "title": "认证质保",
-        "description": "所有车辆均通过严格的150点检查。"
-      },
-      {
         "icon": "pi pi-wallet",
         "title": "灵活融资",
         "description": "与主要金融机构合作，为您提供最优利率。"

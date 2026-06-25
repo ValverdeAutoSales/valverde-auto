@@ -23,11 +23,6 @@
     
     "benefits": [
       {
-        "icon": "pi pi-shield",
-        "title": "Certified guarantee",
-        "description": "All our vehicles go through a rigorous 150-point inspection."
-      },
-      {
         "icon": "pi pi-wallet",
         "title": "Flexible financing",
         "description": "We work with top lenders to offer you the best rate."

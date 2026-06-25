@@ -22,11 +22,6 @@
     "my_account": "Acessar minha conta",
     "benefits": [
       {
-        "icon": "pi pi-shield",
-        "title": "Garantia certificada",
-        "description": "Todos os nossos veículos passam por uma rigorosa inspeção de 150 pontos."
-      },
-      {
         "icon": "pi pi-wallet",
         "title": "Financiamento sob medida",
         "description": "Trabalhamos com as principais instituições para oferecer a melhor taxa."

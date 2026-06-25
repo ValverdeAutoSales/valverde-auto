@@ -18,7 +18,6 @@
     "my_account": "Acceder a mi cuenta",
     
     "benefits": [
-      { "icon": "pi pi-shield", "title": "Garantía certificada",      "description": "Todos nuestros vehículos pasan por una rigurosa inspección de 150 puntos." },
       { "icon": "pi pi-wallet", "title": "Financiamiento a tu medida","description": "Trabajamos con las principales entidades para ofrecerte la mejor tasa." },
       { "icon": "pi pi-headphones","title": "Asesoría personalizada",    "description": "Un asesor te acompaña desde la elección hasta la entrega de llaves." },
       { "icon": "pi pi-sync",   "title": "Recompra y canje",          "description": "Recibimos tu auto actual como parte de pago, con tasación justa." }
