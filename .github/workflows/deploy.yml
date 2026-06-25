@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # ← CAMBIADO: necesario para subir a gh-pages
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -28,6 +28,25 @@ jobs:
         run: npx ng build --configuration production --base-href /valverde-auto/
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
+
+      # ✅ NUEVO PASO: Crear 404.html para SPA
+      - name: Create 404.html for SPA routing
+        run: |
+          echo '<!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Valverde Auto Sales</title>
+            <base href="/valverde-auto/">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+          </head>
+          <body>
+            <script>
+              // Redirige todas las rutas a index.html
+              window.location.href = "/valverde-auto/index.html?path=" + window.location.pathname;
+            </script>
+          </body>
+          </html>' > dist/valverde-auto/browser/404.html
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3

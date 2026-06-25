@@ -24,7 +24,7 @@
     ],
     "slides": [
       { "title": "Encuentra el auto de tus sueños",  "subtitle": "Vehículos nuevos y seminuevos certificados, con garantía Valverde.", "cta": "Ver catálogo" },
-      { "title": "Estrena tu vehículo con bajas millas",              "subtitle": "Las mejores marcas, financiamiento flexible y entrega inmediata.", "cta": "Cotizar ahora" },
+      { "title": "Estrena tu vehículo con bajas millas", "subtitle": "Las mejores marcas, financiamiento flexible y entrega inmediata.", "cta": "Cotizar ahora" },
       { "title": "Vende o cambia tu auto",           "subtitle": "Tasación justa y rápida para tu próxima compra.",                 "cta": "Contáctanos" }
     ]
   },
