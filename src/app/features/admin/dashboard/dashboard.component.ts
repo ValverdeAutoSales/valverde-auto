@@ -145,12 +145,18 @@ export class DashboardComponent {
     try {
       if (this.dialogMode() === 'create') {
         await this.carService.create(payload);
-        this.ms.add({ severity:'success', summary: this.i18n.get('dashboard.savedOk'),
-          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.savedDetail')}` });
+        this.ms.add({ 
+          severity:'success', 
+          summary: this.i18n.get('dashboard.saved_ok'),
+          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.saved_detail')}` 
+        });
       } else {
         await this.carService.update(this.editingId()!, payload);
-        this.ms.add({ severity:'success', summary: this.i18n.get('dashboard.updatedOk'),
-          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.updatedDetail')}` });
+        this.ms.add({ 
+          severity:'success', 
+          summary: this.i18n.get('dashboard.updated_ok'),
+          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.updated_detail')}` // ✅ CORREGIDO
+        });
       }
       this.showDialog.set(false);
     } catch (e) {
@@ -162,18 +168,18 @@ export class DashboardComponent {
 
   confirmDelete(car: Car): void {
     this.cs.confirm({
-      message: this.i18n.get('dashboard.confirmDeleteMsg', { brand: car.brand, model: car.model }),
-      header:  this.i18n.get('dashboard.confirmDeleteTitle'),
+      message: this.i18n.get('dashboard.confirm_delete_msg', { brand: car.brand, model: car.model }),
+      header:  this.i18n.get('dashboard.confirm_delete_title'),
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel:  this.i18n.get('dashboard.confirmYes'),
-      rejectLabel:  this.i18n.get('dashboard.confirmNo'),
+      acceptLabel:  this.i18n.get('dashboard.confirm_yes'),
+      rejectLabel:  this.i18n.get('dashboard.confirm_no'),
       acceptButtonStyleClass: 'p-button-danger',
       accept: async () => {
         this.deleting.set(car.id);
         await this.carService.delete(car.id);
         this.deleting.set(null);
-        this.ms.add({ severity:'warn', summary: this.i18n.get('dashboard.deletedOk'),
-          detail:`${car.brand} ${car.model} ${this.i18n.get('dashboard.deletedDetail')}` });
+        this.ms.add({ severity:'warn', summary: this.i18n.get('dashboard.deleted_ok'),
+          detail:`${car.brand} ${car.model} ${this.i18n.get('dashboard.deleted_detail')}` });
       }
     });
   }
@@ -190,7 +196,7 @@ export class DashboardComponent {
 
   get dialogTitle(): string {
     return this.dialogMode() === 'create'
-      ? this.i18n.get('dashboard.createTitle')
-      : this.i18n.get('dashboard.editTitle');
+      ? this.i18n.get('dashboard.create_title')
+      : this.i18n.get('dashboard.edit_title');
   }
 }

@@ -14,7 +14,7 @@
           {{ i18n.get('dashboard.manage') }}
         </p>
       </div>
-      <p-button [label]="i18n.get('dashboard.addVehicle')" icon="pi pi-plus" (onClick)="openCreate()" />
+      <p-button [label]="i18n.get('dashboard.add_vehicle')" icon="pi pi-plus" (onClick)="openCreate()" />
     </div>
 
     <!-- Stats -->
@@ -114,7 +114,7 @@
 
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.brand') }}</label>
-      <input pInputText formControlName="brand" [placeholder]="i18n.get('dashboard.brandPlaceholder')" class="w-full" />
+      <input pInputText formControlName="brand" [placeholder]="i18n.get('dashboard.brand_placeholder')" class="w-full" />
       @if (form.controls.brand.touched && form.controls.brand.invalid) {
         <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
       }
@@ -122,7 +122,7 @@
 
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.model') }}</label>
-      <input pInputText formControlName="model" [placeholder]="i18n.get('dashboard.modelPlaceholder')" class="w-full" />
+      <input pInputText formControlName="model" [placeholder]="i18n.get('dashboard.model_placeholder')" class="w-full" />
       @if (form.controls.model.touched && form.controls.model.invalid) {
         <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
       }
@@ -130,12 +130,18 @@
 
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.version') }}</label>
-      <input pInputText formControlName="version" [placeholder]="i18n.get('dashboard.versionPlaceholder')" class="w-full" />
+      <input pInputText formControlName="version" [placeholder]="i18n.get('dashboard.version_placeholder')" class="w-full" />
+      @if (form.controls.version.touched && form.controls.version.invalid) {
+        <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
+      }
     </div>
 
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.year') }} *</label>
       <input pInputText type="number" formControlName="year" placeholder="2024" class="w-full" />
+      @if (form.controls.year.touched && form.controls.year.invalid) {
+        <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
+      }
     </div>
 
     <div class="flex flex-col gap-1">
@@ -144,7 +150,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.kmLabel') }} *</label>
+      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.km_label') }} *</label>
       <input pInputText type="number" formControlName="mileage" placeholder="0" class="w-full" />
     </div>
 
@@ -168,28 +174,28 @@
 
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.tags') }}</label>
-      <input pInputText formControlName="tags" [placeholder]="i18n.get('dashboard.tagsHint')" class="w-full" />
-      <small class="text-rose-900/50">{{ i18n.get('dashboard.tagsHint') }}</small>
+      <input pInputText formControlName="tags" [placeholder]="i18n.get('dashboard.tags_hint')" class="w-full" />
+      <small class="text-rose-900/50">{{ i18n.get('dashboard.tags_hint') }}</small>
     </div>
 
     <!-- URL imagen -->
     <div class="flex flex-col gap-1 md:col-span-2">
-      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.imageUrl') }}</label>
+      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.image_url') }}</label>
       <input pInputText formControlName="image"
-             [placeholder]="i18n.get('dashboard.imageUrlPlaceholder')"
+             [placeholder]="i18n.get('dashboard.image_url_placeholder')"
              class="w-full"
              (input)="onImageUrlChange(form.controls.image.value)" />
     </div>
 
     <!-- Upload local -->
     <div class="flex flex-col gap-1 md:col-span-2">
-      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.uploadImage') }}</label>
+      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.upload_image') }}</label>
       <input type="file" accept="image/*"
              class="block w-full rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm
                     text-rose-900 file:mr-3 file:rounded file:border-0 file:bg-rose-700
                     file:px-3 file:py-1 file:text-white file:text-xs"
              (change)="onFileSelected($event)" />
-      <small class="text-rose-900/50">{{ i18n.get('dashboard.uploadHint') }}</small>
+      <small class="text-rose-900/50">{{ i18n.get('dashboard.upload_hint') }}</small>
     </div>
 
     <!-- Preview -->
