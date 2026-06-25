@@ -1,71 +1,83 @@
 <header class="sticky top-0 z-40 border-b border-rose-100 bg-white/90 backdrop-blur">
   <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
 
-    <!-- Logo -->
+    <!-- Logo (izquierda) -->
     <a routerLink="/" class="flex items-center gap-2 overflow-visible" (click)="closeMenu()">
       <img src="assets/images/logounalinea-sinfondo.png" alt="Valverde Auto Sales" 
       class="h-20 w-auto -my-4 md:h-24 md:-my-6" />
     </a>
 
-    <!-- Nav desktop -->
-    <nav class="hidden items-center gap-8 md:flex">
-      <a routerLink="/" routerLinkActive="text-rose-700 font-semibold"
-         [routerLinkActiveOptions]="{exact:true}"
-         class="text-sm font-medium text-rose-900/80 transition hover:text-rose-700">
-        {{ i18n.get('nav.home') }}
-      </a>
-      <a routerLink="/catalogo" routerLinkActive="text-rose-700 font-semibold"
-         class="text-sm font-medium text-rose-900/80 transition hover:text-rose-700">
-        {{ i18n.get('nav.catalog') }}
-      </a>
-    </nav>
+    <!-- Contenedor derecho: botón móvil + hamburguesa (y desktop) -->
+    <div class="flex items-center gap-2 md:gap-3">
 
-    <!-- Acciones desktop -->
-    <div class="hidden items-center gap-3 md:flex">
-
-      <!-- NUEVO: Botón de pre-aprobación destacado -->
+      <!-- Botón de pre-aprobación en MÓVIL (visible solo en móvil) -->
       <a href="https://valverdeautosales.startyourcreditapproval.com/?lang=es" 
          target="_blank" 
          rel="noopener noreferrer"
-         class="rounded-full bg-gradient-to-r from-rose-500 to-rose-700 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-rose-500/30">
-        <i class="pi pi-check-circle mr-2"></i>
+         class="md:hidden rounded-full bg-gradient-to-r from-rose-500 to-rose-700 px-3 py-1.5 text-xs font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-rose-500/30 whitespace-nowrap">
+        <i class="pi pi-check-circle mr-1"></i>
         {{ i18n.get('nav.pre_approval') }}
       </a>
-      <app-language-selector />
 
-      @if (auth.isAuthenticated()) {
-        @if (auth.isAdmin()) {
-          <a routerLink="/admin">
-            <p-button [label]="i18n.get('nav.admin')" icon="pi pi-shield"
-                      severity="secondary" size="small" />
+      <!-- Nav desktop -->
+      <nav class="hidden items-center gap-8 md:flex">
+        <a routerLink="/" routerLinkActive="text-rose-700 font-semibold"
+           [routerLinkActiveOptions]="{exact:true}"
+           class="text-sm font-medium text-rose-900/80 transition hover:text-rose-700">
+          {{ i18n.get('nav.home') }}
+        </a>
+        <a routerLink="/catalogo" routerLinkActive="text-rose-700 font-semibold"
+           class="text-sm font-medium text-rose-900/80 transition hover:text-rose-700">
+          {{ i18n.get('nav.catalog') }}
+        </a>
+      </nav>
+
+      <!-- Acciones desktop -->
+      <div class="hidden items-center gap-3 md:flex">
+        <!-- Botón de pre-aprobación desktop -->
+        <a href="https://valverdeautosales.startyourcreditapproval.com/?lang=es" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="rounded-full bg-gradient-to-r from-rose-500 to-rose-700 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-rose-500/30">
+          <i class="pi pi-check-circle mr-2"></i>
+          {{ i18n.get('nav.pre_approval') }}
+        </a>
+        <app-language-selector />
+
+        @if (auth.isAuthenticated()) {
+          @if (auth.isAdmin()) {
+            <a routerLink="/admin">
+              <p-button [label]="i18n.get('nav.admin')" icon="pi pi-shield"
+                        severity="secondary" size="small" />
+            </a>
+          }
+          <span class="text-sm text-rose-900/70">
+            {{ i18n.get('nav.hello') }}, {{ auth.user()?.name }}
+          </span>
+          <p-button [label]="i18n.get('nav.logout')" icon="pi pi-sign-out"
+                    severity="secondary" [outlined]="true" size="small"
+                    (onClick)="auth.logout()" />
+        } @else {
+          <a routerLink="/login">
+            <p-button [label]="i18n.get('nav.login')" icon="pi pi-user" size="small" />
           </a>
         }
-        <span class="text-sm text-rose-900/70">
-          {{ i18n.get('nav.hello') }}, {{ auth.user()?.name }}
-        </span>
-        <p-button [label]="i18n.get('nav.logout')" icon="pi pi-sign-out"
-                  severity="secondary" [outlined]="true" size="small"
-                  (onClick)="auth.logout()" />
-      } @else {
-        <a routerLink="/login">
-          <p-button [label]="i18n.get('nav.login')" icon="pi pi-user" size="small" />
-        </a>
-      }
-    </div>
+      </div>
 
-    <!-- Burger mobile -->
-    <button type="button"
-            class="flex h-10 w-10 items-center justify-center rounded-full border
-                   border-rose-200 text-rose-700 md:hidden"
-            (click)="toggleMenu()" aria-label="Abrir menú">
-      <i class="pi" [class.pi-bars]="!menuOpen()" [class.pi-times]="menuOpen()"></i>
-    </button>
+      <!-- Burger mobile -->
+      <button type="button"
+              class="flex h-10 w-10 items-center justify-center rounded-full border
+                     border-rose-200 text-rose-700 md:hidden"
+              (click)="toggleMenu()" aria-label="Abrir menú">
+        <i class="pi" [class.pi-bars]="!menuOpen()" [class.pi-times]="menuOpen()"></i>
+      </button>
+    </div>
   </div>
 
   <!-- Nav mobile -->
   @if (menuOpen()) {
     <nav class="flex flex-col gap-1 border-t border-rose-100 bg-white px-4 py-3 md:hidden">
-      <a routerLink="/"        (click)="closeMenu()"
+      <a routerLink="/" (click)="closeMenu()"
          class="rounded-lg px-3 py-2 text-sm font-medium text-rose-900/80 hover:bg-rose-50">
         {{ i18n.get('nav.home') }}
       </a>
