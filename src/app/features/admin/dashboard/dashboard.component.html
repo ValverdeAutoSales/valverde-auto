@@ -4,26 +4,31 @@
 <section class="min-h-screen bg-rose-50">
   <div class="mx-auto max-w-7xl px-4 py-8 md:px-8">
 
-    <!-- Header -->
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
     <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-rose-950 md:text-3xl">{{ i18n.get('dashboard.title') }}</h1>
-        <p class="mt-1 text-rose-900/60">
+        <h1 class="text-2xl font-bold text-rose-950 md:text-3xl">
+          {{ i18n.get('dashboard.title') }}
+        </h1>
+        <p class="mt-1 text-sm text-rose-900/60">
           {{ i18n.get('dashboard.welcome') }},
           <span class="font-semibold text-rose-700">{{ auth.user()?.name }}</span>.
           {{ i18n.get('dashboard.manage') }}
         </p>
       </div>
-      <p-button [label]="i18n.get('dashboard.add_vehicle')" icon="pi pi-plus" (onClick)="openCreate()" />
+      <p-button
+        [label]="i18n.get('dashboard.add_vehicle')"
+        icon="pi pi-plus"
+        (onClick)="openCreate()" />
     </div>
 
-    <!-- Stats -->
+    <!-- ── Stats ──────────────────────────────────────────────────────────── -->
     <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       @for (stat of [
-        {label: i18n.get('dashboard.total'),     value: stats().total,     icon:'pi-car',           bg:'bg-rose-100',   text:'text-rose-700'},
-        {label: i18n.get('dashboard.available'), value: stats().available, icon:'pi-check-circle',  bg:'bg-green-100',  text:'text-green-600'},
-        {label: i18n.get('dashboard.reserved'),  value: stats().reserved,  icon:'pi-clock',         bg:'bg-amber-100',  text:'text-amber-500'},
-        {label: i18n.get('dashboard.sold'),      value: stats().sold,      icon:'pi-dollar',        bg:'bg-rose-100',   text:'text-rose-700'}
+        { label: i18n.get('dashboard.total'),     value: stats().total,     icon: 'pi-car',          bg: 'bg-rose-100',  text: 'text-rose-700'  },
+        { label: i18n.get('dashboard.available'), value: stats().available, icon: 'pi-check-circle', bg: 'bg-green-100', text: 'text-green-600' },
+        { label: i18n.get('dashboard.reserved'),  value: stats().reserved,  icon: 'pi-clock',        bg: 'bg-amber-100', text: 'text-amber-500' },
+        { label: i18n.get('dashboard.sold'),      value: stats().sold,      icon: 'pi-dollar',       bg: 'bg-rose-100',  text: 'text-rose-700'  }
       ]; track stat.label) {
         <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-rose-100">
           <div class="flex items-center gap-3">
@@ -39,24 +44,37 @@
       }
     </div>
 
-    <!-- Tabla -->
+    <!-- ── Tabla inventario ────────────────────────────────────────────────── -->
     <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-rose-100">
       <div class="border-b border-rose-100 px-6 py-4">
         <h2 class="text-lg font-semibold text-rose-950">{{ i18n.get('dashboard.inventory') }}</h2>
       </div>
 
-      <p-table [value]="cars()" [paginator]="true" [rows]="6"
-               [rowsPerPageOptions]="[6,12,24]" responsiveLayout="scroll"
-               styleClass="p-datatable-sm">
+      <p-table
+        [value]="cars()"
+        [paginator]="true"
+        [rows]="6"
+        [rowsPerPageOptions]="[6, 12, 24]"
+        responsiveLayout="scroll"
+        styleClass="p-datatable-sm"
+      >
         <ng-template #header>
           <tr>
-            <th class="w-16">{{ i18n.get('dashboard.photo') }}</th>
-            <th pSortableColumn="brand">{{ i18n.get('dashboard.vehicle') }} <p-sortIcon field="brand"/></th>
-            <th pSortableColumn="year">{{ i18n.get('dashboard.year') }} <p-sortIcon field="year"/></th>
-            <th pSortableColumn="price">{{ i18n.get('dashboard.price') }} <p-sortIcon field="price"/></th>
+            <th class="w-20">{{ i18n.get('dashboard.photo') }}</th>
+            <th pSortableColumn="brand">
+              {{ i18n.get('dashboard.vehicle') }} <p-sortIcon field="brand" />
+            </th>
+            <th pSortableColumn="year">
+              {{ i18n.get('dashboard.year') }} <p-sortIcon field="year" />
+            </th>
+            <th pSortableColumn="price">
+              {{ i18n.get('dashboard.price') }} <p-sortIcon field="price" />
+            </th>
             <th>{{ i18n.get('dashboard.km_label') }}</th>
             <th>{{ i18n.get('dashboard.fuel') }}</th>
-            <th pSortableColumn="status">{{ i18n.get('dashboard.status') }} <p-sortIcon field="status"/></th>
+            <th pSortableColumn="status">
+              {{ i18n.get('dashboard.status') }} <p-sortIcon field="status" />
+            </th>
             <th class="text-center">{{ i18n.get('dashboard.actions') }}</th>
           </tr>
         </ng-template>
@@ -64,9 +82,19 @@
         <ng-template #body let-car>
           <tr class="hover:bg-rose-50/50">
             <td>
-              <img [src]="car.image" [alt]="car.model"
-                   class="h-12 w-16 rounded-lg object-cover"
-                   onerror="this.src='https://placehold.co/64x48?text=Auto'" />
+              <!--
+                CarImagePipe resuelve:
+                  "/images/cars/uuid.jpg"  → "https://actoursapps.com.pe:8087/images/cars/uuid.jpg"
+                  "https://unsplash..."    → sin cambios
+                  "data:image/..."         → sin cambios (Base64)
+                  "assets/images/..."      → sin cambios (local Angular)
+              -->
+              <img
+                [src]="car.image | carImage"
+                [alt]="car.brand + ' ' + car.model"
+                class="h-12 w-20 rounded-lg object-cover ring-1 ring-rose-100"
+                onerror="this.src='https://placehold.co/80x48/f9e8e6/bd6f6f?text=Auto'"
+              />
             </td>
             <td>
               <p class="font-semibold text-rose-950">{{ car.brand }} {{ car.model }}</p>
@@ -77,16 +105,27 @@
             <td class="text-rose-900/70">{{ car.mileage | number }} km</td>
             <td class="text-rose-900/70">{{ car.fuelType }}</td>
             <td>
-              <p-tag [value]="i18n.get('status.' + car.status)"
-                     [severity]="statusSeverity(car.status)" />
+              <p-tag
+                [value]="i18n.get('status.' + car.status)"
+                [severity]="statusSeverity(car.status)" />
             </td>
             <td>
               <div class="flex items-center justify-center gap-1">
-                <p-button icon="pi pi-pencil" size="small" [text]="true"
-                          severity="secondary" (onClick)="openEdit(car)" />
-                <p-button icon="pi pi-trash" size="small" [text]="true"
-                          severity="danger" (onClick)="confirmDelete(car)"
-                          [loading]="deleting() === car.id" />
+                <p-button
+                  icon="pi pi-pencil"
+                  size="small"
+                  [text]="true"
+                  severity="secondary"
+                  [pTooltip]="i18n.get('dashboard.edit')"
+                  (onClick)="openEdit(car)" />
+                <p-button
+                  icon="pi pi-trash"
+                  size="small"
+                  [text]="true"
+                  severity="danger"
+                  [pTooltip]="i18n.get('dashboard.delete')"
+                  [loading]="deleting() === car.id"
+                  (onClick)="confirmDelete(car)" />
               </div>
             </td>
           </tr>
@@ -105,37 +144,48 @@
   </div>
 </section>
 
-<!-- ── Modal CRUD ───────────────────────────────────────────────────────── -->
-<p-dialog [header]="dialogTitle" [(visible)]="showDialog"
-          [modal]="true" [dismissableMask]="true"
-          [style]="{width:'680px',maxWidth:'95vw'}" [draggable]="false">
-
+<!-- ── Modal CRUD ─────────────────────────────────────────────────────────── -->
+<p-dialog
+  [header]="dialogTitle"
+  [(visible)]="showDialog"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '680px', maxWidth: '95vw' }"
+  [draggable]="false"
+>
   <form [formGroup]="form" class="grid grid-cols-1 gap-4 pt-2 md:grid-cols-2">
 
+    <!-- Marca -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.brand') }}</label>
-      <input pInputText formControlName="brand" [placeholder]="i18n.get('dashboard.brand_placeholder')" class="w-full" />
+      <input pInputText formControlName="brand"
+             [placeholder]="i18n.get('dashboard.brand_placeholder')" class="w-full" />
       @if (form.controls.brand.touched && form.controls.brand.invalid) {
         <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
       }
     </div>
 
+    <!-- Modelo -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.model') }}</label>
-      <input pInputText formControlName="model" [placeholder]="i18n.get('dashboard.model_placeholder')" class="w-full" />
+      <input pInputText formControlName="model"
+             [placeholder]="i18n.get('dashboard.model_placeholder')" class="w-full" />
       @if (form.controls.model.touched && form.controls.model.invalid) {
         <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
       }
     </div>
 
+    <!-- Versión -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.version') }}</label>
-      <input pInputText formControlName="version" [placeholder]="i18n.get('dashboard.version_placeholder')" class="w-full" />
+      <input pInputText formControlName="version"
+             [placeholder]="i18n.get('dashboard.version_placeholder')" class="w-full" />
       @if (form.controls.version.touched && form.controls.version.invalid) {
         <small class="text-red-600">{{ i18n.get('dashboard.required') }}</small>
       }
     </div>
 
+    <!-- Año -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.year') }} *</label>
       <input pInputText type="number" formControlName="year" placeholder="2024" class="w-full" />
@@ -144,41 +194,48 @@
       }
     </div>
 
+    <!-- Precio -->
     <div class="flex flex-col gap-1">
-      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.price') }} *</label>
+      <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.price') }} (USD) *</label>
       <input pInputText type="number" formControlName="price" placeholder="24990" class="w-full" />
     </div>
 
+    <!-- Kilometraje -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.km_label') }} *</label>
       <input pInputText type="number" formControlName="mileage" placeholder="0" class="w-full" />
     </div>
 
+    <!-- Combustible -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.fuel') }} *</label>
       <p-select [options]="fuelOptions" optionLabel="label" optionValue="value"
                 formControlName="fuelType" class="w-full" />
     </div>
 
+    <!-- Transmisión -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">Transmisión *</label>
       <p-select [options]="txOptions" optionLabel="label" optionValue="value"
                 formControlName="transmission" class="w-full" />
     </div>
 
+    <!-- Estado -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.status') }} *</label>
       <p-select [options]="statusOptions" optionLabel="label" optionValue="value"
                 formControlName="status" class="w-full" />
     </div>
 
+    <!-- Etiquetas -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.tags') }}</label>
-      <input pInputText formControlName="tags" [placeholder]="i18n.get('dashboard.tags_hint')" class="w-full" />
+      <input pInputText formControlName="tags"
+             [placeholder]="i18n.get('dashboard.tags_hint')" class="w-full" />
       <small class="text-rose-900/50">{{ i18n.get('dashboard.tags_hint') }}</small>
     </div>
 
-    <!-- URL imagen -->
+    <!-- URL de imagen -->
     <div class="flex flex-col gap-1 md:col-span-2">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.image_url') }}</label>
       <input pInputText formControlName="image"
@@ -187,34 +244,59 @@
              (input)="onImageUrlChange(form.controls.image.value)" />
     </div>
 
-    <!-- Upload local -->
+    <!-- Subir archivo -->
     <div class="flex flex-col gap-1 md:col-span-2">
       <label class="text-sm font-medium text-rose-900">{{ i18n.get('dashboard.upload_image') }}</label>
-      <input type="file" accept="image/*"
-             class="block w-full rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm
-                    text-rose-900 file:mr-3 file:rounded file:border-0 file:bg-rose-700
-                    file:px-3 file:py-1 file:text-white file:text-xs"
-             (change)="onFileSelected($event)" />
-      <small class="text-rose-900/50">{{ i18n.get('dashboard.upload_hint') }}</small>
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        class="block w-full cursor-pointer rounded-lg border border-rose-200 bg-rose-50 px-3 py-2
+               text-sm text-rose-900 file:mr-3 file:cursor-pointer file:rounded file:border-0
+               file:bg-rose-700 file:px-3 file:py-1 file:text-white file:text-xs
+               hover:file:bg-rose-800"
+        [disabled]="uploadingImage()"
+        (change)="onFileSelected($event)"
+      />
+      <small class="text-rose-900/50">{{ i18n.get('dashboard.upload_hint') }} Máx. 10 MB.</small>
     </div>
 
-    <!-- Preview -->
-    @if (imagePreview()) {
+    <!-- Indicador de carga -->
+    @if (uploadingImage()) {
+      <div class="md:col-span-2 flex items-center gap-2 rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Subiendo imagen al servidor...</span>
+      </div>
+    }
+
+    <!-- Preview de imagen -->
+    @if (imagePreview() && !uploadingImage()) {
       <div class="md:col-span-2">
-        <label class="mb-1 block text-sm font-medium text-rose-900">{{ i18n.get('dashboard.preview') }}</label>
-        <img [src]="imagePreview()" alt="Preview"
-             class="h-44 w-full rounded-xl object-cover ring-1 ring-rose-200"
-             onerror="this.src='https://placehold.co/680x176?text=Imagen+no+disponible'" />
+        <label class="mb-2 block text-sm font-medium text-rose-900">
+          {{ i18n.get('dashboard.preview') }}
+        </label>
+        <img
+          [src]="imagePreview() | carImage"
+          alt="Preview"
+          class="h-44 w-full rounded-xl object-cover ring-1 ring-rose-200"
+          onerror="this.src='https://placehold.co/680x176/f9e8e6/bd6f6f?text=Imagen+no+disponible'"
+        />
       </div>
     }
   </form>
 
   <ng-template #footer>
     <div class="flex justify-end gap-2 pt-2">
-      <p-button [label]="i18n.get('dashboard.cancel')"
-                [outlined]="true" severity="secondary" (onClick)="showDialog.set(false)" />
-      <p-button [label]="dialogMode()==='create' ? i18n.get('dashboard.save') : i18n.get('dashboard.update')"
-                icon="pi pi-check" [loading]="saving()" (onClick)="save()" />
+      <p-button
+        [label]="i18n.get('dashboard.cancel')"
+        [outlined]="true"
+        severity="secondary"
+        (onClick)="showDialog.set(false)" />
+      <p-button
+        [label]="dialogMode() === 'create' ? i18n.get('dashboard.save') : i18n.get('dashboard.update')"
+        icon="pi pi-check"
+        [loading]="saving()"
+        [disabled]="uploadingImage()"
+        (onClick)="save()" />
     </div>
   </ng-template>
 </p-dialog>

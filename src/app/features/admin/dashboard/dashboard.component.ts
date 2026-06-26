@@ -11,12 +11,14 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CarService } from '../../../core/services/car.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { I18nService } from '../../../core/services/i18n.service';
+import { CarImagePipe } from '../../../shared/pipes/car-image.pipe';
 import { Car, CarPayload, CarStatus, FuelType, Transmission } from '../../../core/models/car.model';
+
 
 type DialogMode = 'create' | 'edit';
 
@@ -24,29 +26,42 @@ type DialogMode = 'create' | 'edit';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    DecimalPipe, FormsModule, ReactiveFormsModule,
-    TableModule, TagModule, ButtonModule, DialogModule,
-    InputTextModule, SelectModule, TextareaModule,
-    ConfirmDialogModule, ToastModule, ProgressSpinnerModule
+    DecimalPipe,
+    FormsModule,
+    ReactiveFormsModule,
+    TableModule,
+    TagModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    SelectModule,
+    TextareaModule,
+    ConfirmDialogModule,
+    ToastModule,
+    TooltipModule,
+    CarImagePipe          // ← resuelve /images/cars/uuid.jpg → https://server/images/cars/uuid.jpg
   ],
   providers: [ConfirmationService],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
-  readonly carService          = inject(CarService);
-  readonly auth                = inject(AuthService);
-  readonly i18n                = inject(I18nService);
-  private readonly fb          = inject(FormBuilder);
-  private readonly cs          = inject(ConfirmationService);
-  private readonly ms          = inject(MessageService);
 
-  readonly cars         = this.carService.cars;
-  readonly showDialog   = signal(false);
-  readonly dialogMode   = signal<DialogMode>('create');
-  readonly editingId    = signal<number | null>(null);
-  readonly imagePreview = signal<string>('');
-  readonly saving       = signal(false);
-  readonly deleting     = signal<number | null>(null);
+  readonly carService = inject(CarService);
+  readonly auth       = inject(AuthService);
+  readonly i18n       = inject(I18nService);
+
+  private readonly fb = inject(FormBuilder);
+  private readonly cs = inject(ConfirmationService);
+  private readonly ms = inject(MessageService);
+
+  readonly cars           = this.carService.cars;
+  readonly showDialog     = signal(false);
+  readonly dialogMode     = signal<DialogMode>('create');
+  readonly editingId      = signal<number | null>(null);
+  readonly imagePreview   = signal<string>('');
+  readonly saving         = signal(false);
+  readonly uploadingImage = signal(false);
+  readonly deleting       = signal<number | null>(null);
 
   readonly stats = computed(() => {
     const c = this.cars();
@@ -63,12 +78,14 @@ export class DashboardComponent {
     { label: 'Reservado',  value: 'Reservado'  },
     { label: 'Vendido',    value: 'Vendido'    }
   ];
+
   readonly fuelOptions: { label: string; value: FuelType }[] = [
-    { label: 'Gasolina', value: 'Gasolina' },
-    { label: 'Diésel',   value: 'Diésel'   },
-    { label: 'Híbrido',  value: 'Híbrido'  },
-    { label: 'Eléctrico',value: 'Eléctrico'}
+    { label: 'Gasolina',  value: 'Gasolina'  },
+    { label: 'Diésel',    value: 'Diésel'    },
+    { label: 'Híbrido',   value: 'Híbrido'   },
+    { label: 'Eléctrico', value: 'Eléctrico' }
   ];
+
   readonly txOptions: { label: string; value: Transmission }[] = [
     { label: 'Automática', value: 'Automática' },
     { label: 'Manual',     value: 'Manual'     }
@@ -81,24 +98,24 @@ export class DashboardComponent {
     year:         [new Date().getFullYear(), [Validators.required, Validators.min(1990), Validators.max(2035)]],
     price:        [0,  [Validators.required, Validators.min(1)]],
     mileage:      [0,  [Validators.required, Validators.min(0)]],
-    fuelType:     ['Gasolina'  as FuelType,    Validators.required],
-    transmission: ['Automática'as Transmission, Validators.required],
-    status:       ['Disponible'as CarStatus,    Validators.required],
+    fuelType:     ['Gasolina'   as FuelType,    Validators.required],
+    transmission: ['Automática' as Transmission, Validators.required],
+    status:       ['Disponible' as CarStatus,    Validators.required],
     image:        ['', Validators.required],
     tags:         ['']
   });
 
-  // ── Abrir diálogos ────────────────────────────────────────────────────────
+  // ── Abrir/cerrar modal ────────────────────────────────────────────────────
   openCreate(): void {
     this.dialogMode.set('create');
     this.editingId.set(null);
     this.imagePreview.set('');
     this.form.reset({
-      brand:'', model:'', version:'',
+      brand: '', model: '', version: '',
       year: new Date().getFullYear(),
-      price:0, mileage:0,
-      fuelType:'Gasolina', transmission:'Automática', status:'Disponible',
-      image:'', tags:''
+      price: 0, mileage: 0,
+      fuelType: 'Gasolina', transmission: 'Automática', status: 'Disponible',
+      image: '', tags: ''
     });
     this.showDialog.set(true);
   }
@@ -118,22 +135,40 @@ export class DashboardComponent {
   }
 
   // ── Imagen ────────────────────────────────────────────────────────────────
-  onImageUrlChange(url: string): void { this.imagePreview.set(url); }
+  onImageUrlChange(url: string): void {
+    this.imagePreview.set(url);
+  }
 
   async onFileSelected(event: Event): Promise<void> {
     const file = (event.target as HTMLInputElement)?.files?.[0];
     if (!file) return;
-    const url = await this.carService.uploadImage(file);
-    this.form.patchValue({ image: url });
-    this.imagePreview.set(url);
+
+    // Validar tamaño (10 MB máx)
+    if (file.size > 10 * 1024 * 1024) {
+      this.ms.add({ severity: 'warn', summary: 'Archivo muy grande', detail: 'Máximo 10 MB.' });
+      return;
+    }
+
+    this.uploadingImage.set(true);
+    try {
+      const url = await this.carService.uploadImage(file);
+      this.form.patchValue({ image: url });
+      this.imagePreview.set(url);
+    } catch {
+      this.ms.add({ severity: 'error', summary: 'Error', detail: 'No se pudo subir la imagen.' });
+    } finally {
+      this.uploadingImage.set(false);
+    }
   }
 
   // ── CRUD ─────────────────────────────────────────────────────────────────
   async save(): Promise<void> {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.uploadingImage()) { return; }
 
     this.saving.set(true);
     const raw = this.form.getRawValue();
+
     const payload: CarPayload = {
       brand: raw.brand, model: raw.model, version: raw.version,
       year: raw.year, price: raw.price, mileage: raw.mileage,
@@ -145,22 +180,22 @@ export class DashboardComponent {
     try {
       if (this.dialogMode() === 'create') {
         await this.carService.create(payload);
-        this.ms.add({ 
-          severity:'success', 
+        this.ms.add({
+          severity: 'success',
           summary: this.i18n.get('dashboard.saved_ok'),
-          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.saved_detail')}` 
+          detail: `${raw.brand} ${raw.model} ${this.i18n.get('dashboard.saved_detail')}`
         });
       } else {
         await this.carService.update(this.editingId()!, payload);
-        this.ms.add({ 
-          severity:'success', 
+        this.ms.add({
+          severity: 'success',
           summary: this.i18n.get('dashboard.updated_ok'),
-          detail:`${raw.brand} ${raw.model} ${this.i18n.get('dashboard.updated_detail')}` // ✅ CORREGIDO
+          detail: `${raw.brand} ${raw.model} ${this.i18n.get('dashboard.updated_detail')}`
         });
       }
       this.showDialog.set(false);
     } catch (e) {
-      this.ms.add({ severity:'error', summary:'Error', detail: String(e) });
+      this.ms.add({ severity: 'error', summary: 'Error', detail: String(e) });
     } finally {
       this.saving.set(false);
     }
@@ -171,15 +206,23 @@ export class DashboardComponent {
       message: this.i18n.get('dashboard.confirm_delete_msg', { brand: car.brand, model: car.model }),
       header:  this.i18n.get('dashboard.confirm_delete_title'),
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel:  this.i18n.get('dashboard.confirm_yes'),
-      rejectLabel:  this.i18n.get('dashboard.confirm_no'),
+      acceptLabel:            this.i18n.get('dashboard.confirm_yes'),
+      rejectLabel:            this.i18n.get('dashboard.confirm_no'),
       acceptButtonStyleClass: 'p-button-danger',
       accept: async () => {
         this.deleting.set(car.id);
-        await this.carService.delete(car.id);
-        this.deleting.set(null);
-        this.ms.add({ severity:'warn', summary: this.i18n.get('dashboard.deleted_ok'),
-          detail:`${car.brand} ${car.model} ${this.i18n.get('dashboard.deleted_detail')}` });
+        try {
+          await this.carService.delete(car.id);
+          this.ms.add({
+            severity: 'warn',
+            summary: this.i18n.get('dashboard.deleted_ok'),
+            detail: `${car.brand} ${car.model} ${this.i18n.get('dashboard.deleted_detail')}`
+          });
+        } catch (e) {
+          this.ms.add({ severity: 'error', summary: 'Error', detail: String(e) });
+        } finally {
+          this.deleting.set(null);
+        }
       }
     });
   }
@@ -190,8 +233,9 @@ export class DashboardComponent {
   }
 
   formatPrice(v: number): string {
-    return new Intl.NumberFormat('es-PE',
-      { style:'currency', currency:'USD', maximumFractionDigits:0 }).format(v);
+    return new Intl.NumberFormat('es-PE', {
+      style: 'currency', currency: 'USD', maximumFractionDigits: 0
+    }).format(v);
   }
 
   get dialogTitle(): string {

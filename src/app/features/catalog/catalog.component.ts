@@ -77,6 +77,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TextareaModule } from 'primeng/textarea'; // ✅ Cambio aquí
 import { Car } from '../../core/models/car.model';
 import { CarService } from '../../core/services/car.service';
+import { CarImagePipe } from '../../shared/pipes/car-image.pipe';
 
 @Component({
   selector: 'app-catalog',
@@ -91,7 +92,8 @@ import { CarService } from '../../core/services/car.service';
     IconFieldModule, 
     InputIconModule,
     DialogModule,
-    TextareaModule // ✅ Cambio aquí
+    TextareaModule, // ✅ Cambio aquí
+    CarImagePipe // ✅ Agregar a los imports
   ],
   templateUrl: './catalog.component.html'
 })

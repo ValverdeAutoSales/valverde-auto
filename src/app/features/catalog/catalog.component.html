@@ -118,8 +118,14 @@
         @for (car of filteredCars(); track car.id) {
           <article class="overflow-hidden transition bg-white shadow-sm group rounded-2xl ring-1 ring-rose-100 hover:shadow-lg">
             <!-- Card existente -->
+             <!-- ✅ Usar el pipe carImage -->
             <div class="relative h-48 overflow-hidden">
-              <img [src]="car.image" [alt]="car.brand + ' ' + car.model" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
+              <img 
+                [src]="car.image | carImage" 
+                [alt]="car.brand + ' ' + car.model" 
+                class="object-cover w-full h-full transition duration-500 group-hover:scale-105"
+                onerror="this.src='https://placehold.co/400x240/f9e8e6/bd6f6f?text=Sin+imagen'"
+              />
               <p-tag [value]="car.status" [severity]="statusSeverity(car.status)" class="absolute left-3 top-3" />
             </div>
             <div class="p-5">
@@ -182,7 +188,13 @@
   @if (selectedCar()) {
     <div class="p-3 mb-4 rounded-lg bg-rose-50">
       <div class="flex items-center gap-3">
-        <img [src]="selectedCar()?.image" [alt]="selectedCar()?.model" class="object-cover w-16 h-16 rounded-lg" />
+        <!-- ✅ Usar el pipe carImage -->
+        <img 
+          [src]="selectedCar()?.image | carImage" 
+          [alt]="selectedCar()?.model" 
+          class="object-cover w-16 h-16 rounded-lg"
+          onerror="this.src='https://placehold.co/64x64/f9e8e6/bd6f6f?text=Auto'"
+        />
         <div>
           <h3 class="font-semibold text-rose-950">{{ selectedCar()?.brand }} {{ selectedCar()?.model }}</h3>
           <p class="text-sm text-rose-900/70">{{ selectedCar()?.version }} · {{ selectedCar()?.year }}</p>

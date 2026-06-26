@@ -17,10 +17,12 @@ interface Benefit { icon: string; title: string; description: string; }
   templateUrl: './landing.component.html'
 })
 export class LandingComponent {
-  private readonly carService = inject(CarService);
-  readonly i18n               = inject(I18nService);
+  readonly carService = inject(CarService);
+  readonly i18n = inject(I18nService);
 
-  readonly featuredCars = this.carService.getFeatured(3);
+  //readonly featuredCars = this.carService.getFeatured(3);
+  readonly featuredCars = this.carService.featuredCars;
+  readonly availableCars = this.carService.availableCars;
   readonly brands       = ['Toyota','Hyundai','Kia','Suzuki','Nissan','BYD','Jeep'];
 
   get benefits(): Benefit[] {
